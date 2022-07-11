@@ -1,0 +1,64 @@
+ {% extends 'index.html' %}
+{% load static %}
+{% block main %}
+
+<div style="box-sizing: border-box; padding: 10px; margin: 40px 10% ; background-color:white" class="row1">
+    <a class="btn btn-outline-dark" href="/">&#x2190;Continue
+        Shopping </a>
+        
+        <hr>
+        
+        <table class="table">
+            <tr>
+                <th><h5>Items:<strong>{{order.get_cart_items}}</strong></h5></th>
+                <th><h5>Total:<strong>Rs.{{order.get_cart_total|floatformat:2}}</strong></h5></th>
+                 <th>
+                     <a style="float:right;margin:5px" class="btn
+                     btn-success"href="/checkout">Checkout</a>
+                 </th>
+            </tr>
+        </table>
+</div>
+<br>
+<div  style="box-sizing: border-box; padding: 10px; margin: 40px 10% 0px ; background-color:white">
+    <table style="width: 100%;" >
+        <tr style="border-bottom: 1px solid;" >
+            <th style="padding-right: 6rem; ">
+
+            <th style="padding-right: 1.5rem;font-weight: bold;">item</th>
+            <th style="padding-right: 1rem;font-weight: bold;">price</th>
+            <th style="padding-right: 29%;font-weight: bold;">Quantity </th>
+            <th style="padding-right: 10%;font-weight: bold;">Total</th>
+        </tr>
+        
+        {% for item in items%}
+        <tr style="padding-top: 20px;border-bottom: 1px solid;" >
+            <td style="padding-right: 1rem; "> <img width="150px" height="200px" src="{{item.product.image}}" alt=""></td>
+
+            <td style="padding-right: 1.5rem;">{{item.product.name}}</td>
+            <td style="padding-right: 1rem;">{{item.product.price|floatformat:2}}</td>
+            <td style="padding-right: 29%;  display: flex;"><div style="display:inline;height: 100%; margin-top: 44%; ">
+                <p style="position: relative; display: inline; bottom: 10px;">{{item.quantity}}</p>  <div style="display: inline-block; position: relative; left: 10px ; bottom: -3px;">
+               
+                <div>
+                 <img  class="update-cart" data-product={{item.product.id}} data-action="add" style="margin-bottom:-10px; cursor: pointer;"  height="10px" width="10px" src="{%static 'fashion/images/uparrow.png' %}" alt="">  
+
+                </div>
+                <div>
+                  <img class="update-cart" data-product={{item.product.id}} data-action="remove" style="margin-bottom:15px; cursor: pointer;"  height="10px" width="10px" src="{%static 'fashion/images/downarrow.png' %}" alt=""></td>
+
+                </div>
+
+            </div> 
+            </div> 
+            
+
+            <td style="padding-right: 10%;">Rs.{{item.get_total}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+
+
+</div>
+    
+{%endblock main%} 
