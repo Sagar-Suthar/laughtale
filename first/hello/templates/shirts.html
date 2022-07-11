@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block main %}
+{% for shirt in shirts%}
+<div class="card">
+  <img src="{{shirt.image}}" alt="Avatar" style="width:100%; height:400px;">
+  <div class="container">
+    <h4><strong>{{shirt.name}}</strong></h4>
+    <hr><p>
+    <button  data-product={{shirt.id}} data-action="add" class="btn btn-outline-dark update-cart" style="margin-right: 30%;">Add to Cart</button>       <strong>Rs.{{shirt.price|floatformat:2}}</h4>
+    </strong> </p>
+  </div>
+</div>
+{% endfor%}
+{%endblock main%}

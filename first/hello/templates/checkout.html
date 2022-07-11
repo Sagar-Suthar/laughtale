@@ -1,0 +1,108 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block main %}
+<div>
+    
+<div  style="box-sizing: border-box; padding: 10px; margin: 40px 10% 0px;width:30% ; background-color:white ; display: inline-block; float: left;">
+    <form id="form" action="#" method="post">
+        {% csrf_token %}
+      
+        
+        <p><b> Shipping information</b></p>
+        
+        <input type="text" name="address" placeholder="Address" required>
+        <input style="margin-left: 3rem; margin-top: 10px;" type="text" name="city" placeholder="City" required>
+        <input type="text" name="state" placeholder="State" required>
+        <input style="margin-left: 3rem;margin-top: 10px;" type="text" name="zipcode" placeholder="Zip Code" required>
+        <hr>
+        <button id="button" type="submit" style="visibility: visible; width: 90%; margin-left: 10px; background-color: green;">Continue</button>
+    </form>
+    
+<div style="padding: 20px; display: none  ; background-color:white; " id="payment-info">
+    <small>Payment Option</small>
+    <button id="make-payment">Make Payment</button>
+</div>
+</div>
+    
+</div>
+
+<div  style="box-sizing: border-box; padding: 10px; margin: 40px 3% 0px;width:30% ; background-color:white ; display:inline-block;  ">
+    <button><a href="/cart"> Back to Cart</a></button>
+    <hr>
+    <p><h2> Order Summary</h2></p>
+    <table>
+        {%for item in items%}
+        <tr>
+
+    <td style="padding-right: 6rem; "> <img width="60px" height="60px" src="{{item.product.image}}" alt=""></td>
+
+    <td style="padding-right: 4rem;">{{item.product.name}}</td>
+    <td style="padding-right: 4rem;">{{item.product.price}}</td>
+    
+    
+
+    <td style="padding-right: 10%;">x{{item.quantity}}</td>
+        </tr>
+    {% endfor%}
+
+    
+</table>
+<hr>
+<h4>Items: {{order.get_cart_items}} Total:{{order.get_cart_total|floatformat:2}}</h4>
+
+
+</div>
+<script type="text/javascript">
+    var shipping='{{order.shipping}}'
+    var total='{{order.get_cart_total}}'
+    var form= document.getElementById('form')
+    form.addEventListener('submit',function(e) {
+        e.preventDefault()
+        console.log('form submitted...')
+        
+        document.getElementById('payment-info').style.display="inline-block";
+        document.getElementById('button').style.display="none"
+
+    })
+    document.getElementById('make-payment').addEventListener('click',function (e){
+        submitFormDate()
+        
+    })
+    function submitFormDate() {
+        console.log('payment button clicked')
+        var userFormData={
+            'total': total
+        }
+        var shippingInfo={
+            'address':null,
+            'city':null,
+            'state':null,
+            'zipcode':null
+        }
+    shippingInfo.address=form.address.value
+    shippingInfo.city=form.city.value
+    shippingInfo.state=form.state.value
+    shippingInfo.zipcode=form.zipcode.value
+    var url= '/process_order'
+    fetch (url,{
+        method: 'POST',
+        headers:{
+            'Content-Type': "application/json",
+            'X-CSRFToken' : csrftoken,
+        },
+        body: JSON.stringify({'form': userFormData ,'shipping' : shippingInfo})
+    })
+    .then( (response) => response.json () )
+    .then( (data) => {
+    console.log( 'Success : ', data) ;
+    alert("Teansaction completed ");
+    window.location.href = "/"
+    })
+    }
+        
+    
+   
+
+</script>
+ 
+{% endblock main %}
